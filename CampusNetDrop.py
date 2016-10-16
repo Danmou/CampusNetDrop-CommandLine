@@ -1,5 +1,9 @@
-import os, datetime, getpass, requests
+import os, datetime, getpass, requests, sys
 import xml.etree.ElementTree as ET
+
+def safePrint(str):
+	enc = sys.stdout.encoding
+	print(str.encode(enc,'replace').decode(enc))
 
 def sendRequest(url):
 	dirname, filename = os.path.split(os.path.abspath(__file__))
@@ -27,7 +31,7 @@ def createFolder(name,path):
 	"""Create folder if not already there"""
 	directory = path+"/"+name
 	if not os.path.isdir(directory):
-		print("Creating folder "+path+"/"+name)
+		safePrint("Creating folder "+directory)
 		os.makedirs(directory)
 
 def getFiles(root,path,to_download):
@@ -55,7 +59,7 @@ def getLatestVersion(root):
 
 def download_file(elementID,downloadID,file_path):
 	"""Simply download a file"""
-	print("Downloading file "+file_path)
+	safePrint("Downloading file "+file_path)
 	url='https://www.campusnet.dtu.dk/data/CurrentUser/Elements/%s/Files/%s/Bytes' % (str(elementID),str(downloadID))
 	response = sendRequest(url)
 	data = response.content
