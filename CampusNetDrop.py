@@ -18,9 +18,10 @@ def createFolders(root,path):
 	"""Run through XML nodes and copy folder structure into 'path' """
 	for node in root:
 		if node.tag == "Folder":
-			createFolder(node.get('Name'),path)
+			name = node.get('Name').strip()
+			createFolder(name,path)
 			if len(node):
-				createFolders(node,path+"/"+node.get('Name'))
+				createFolders(node,path+"/"+name)
 
 def createFolder(name,path):
 	"""Create folder if not already there"""
@@ -35,9 +36,9 @@ def getFiles(root,path,to_download):
 		if node.tag == "File":
 			#print("Files found "+path+"/"+node.get('Name'))
 			created = getLatestVersion(node)
-			to_download.append({'Id':node.get('Id'), 'Name':node.get('Name'),'Path':path,'Created':created})
+			to_download.append({'Id':node.get('Id'), 'Name':node.get('Name').strip(),'Path':path,'Created':created})
 		if len(node):
-			getFiles(node,path+"/"+node.get('Name'),to_download)
+			getFiles(node,path+"/"+node.get('Name').strip(),to_download)
 
 def getLatestVersion(root):
 	"""Check all versions for latest date"""
